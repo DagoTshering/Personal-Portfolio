@@ -20,15 +20,15 @@ function App() {
   useLenis();
 
   const { data: settings, isLoading: settingsLoading } = useSettings();
-  const { data: hero, isLoading: heroLoading } = useHero();
-  const { data: about, isLoading: aboutLoading } = useAbout();
-  const { data: skills, isLoading: skillsLoading } = useSkills();
-  const { data: projects, isLoading: projectsLoading } = useProjects();
-  const { data: experience, isLoading: experienceLoading } = useExperience();
-  const { data: testimonials, isLoading: testimonialsLoading } = useTestimonials();
-  const { data: services, isLoading: servicesLoading } = useServices();
-  const { data: blogPosts, isLoading: blogLoading } = useBlogPosts({ published: true });
-  const { data: socialLinks, isLoading: linksLoading } = useSocialLinks();
+  const { isLoading: heroLoading } = useHero();
+  const { isLoading: aboutLoading } = useAbout();
+  const { isLoading: skillsLoading } = useSkills();
+  const { isLoading: projectsLoading } = useProjects();
+  const { isLoading: experienceLoading } = useExperience();
+  const { isLoading: testimonialsLoading } = useTestimonials();
+  const { isLoading: servicesLoading } = useServices();
+  const { isLoading: blogLoading } = useBlogPosts({ published: true });
+  const { isLoading: linksLoading } = useSocialLinks();
 
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
