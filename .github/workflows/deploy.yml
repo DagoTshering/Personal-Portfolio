@@ -1,0 +1,139 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  # ─── JOB 1: Build Portfolio Frontend ───────────────────────────
+  build-portfolio:
+    name: Build Portfolio Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: app/package-lock.json  # ← changed
+
+      - name: Install & Build
+        working-directory: ./app                        # ← changed
+        run: |
+          npm ci
+          npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-dist
+          path: app/dist/                               # ← changed
+
+  # ─── JOB 2: Build Admin Frontend ────────────────────────────────
+  build-admin:
+    name: Build Admin Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: admin/package-lock.json  # ← changed
+
+      - name: Install & Build
+        working-directory: ./admin                        # ← changed
+        run: |
+          npm ci
+          npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: admin-dist
+          path: admin/dist/                               # ← changed
+
+  # ─── JOB 3: Build Backend ───────────────────────────────────────
+  build-backend:
+    name: Build Backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install & Build
+        working-directory: ./backend
+        run: |
+          npm ci
+          npm run build
+
+  # ─── JOB 4: Deploy (only runs if all 3 builds pass) ─────────────
+  deploy:
+    name: Deploy to DigitalOcean
+    runs-on: ubuntu-latest
+    needs: [build-portfolio, build-admin, build-backend]
+    steps:
+      - name: Download portfolio build
+        uses: actions/download-artifact@v4
+        with:
+          name: portfolio-dist
+          path: portfolio-dist/
+
+      - name: Download admin build
+        uses: actions/download-artifact@v4
+        with:
+          name: admin-dist
+          path: admin-dist/
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy Frontend Builds
+        run: |
+          # Sync portfolio frontend
+          rsync -avz --delete portfolio-dist/ \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/portfolio/app/dist/      # ← changed
+
+          # Sync admin frontend
+          rsync -avz --delete admin-dist/ \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/portfolio/admin/dist/    # ← changed
+
+      - name: Deploy Backend & Restart Services
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/portfolio
+
+            # Pull latest code
+            git pull origin main
+
+            cd backend
+            npm ci --production
+            npm run db:migrate
+
+            docker compose down
+            docker compose up -d --build
+
+            sleep 10
+
+            sudo systemctl reload nginx
+
+            echo "✅ Deployment complete!"
