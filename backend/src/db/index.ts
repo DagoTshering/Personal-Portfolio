@@ -6,7 +6,7 @@ import * as schema from './schema.js';
 dotenv.config();
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://portfolio:portfolio_secret@localhost:5432/portfolio',
+  const connectionString = process.env.DATABASE_URL_MIGRATION ?? process.env.DATABASE_URL!,
 });
 
 export const db = drizzle(pool, { schema });
