@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-
 import heroRoutes from './api/hero.js';
 import aboutRoutes from './api/about.js';
 import skillsRoutes from './api/skills.js';
@@ -26,6 +25,9 @@ const PORT = process.env.PORT || 5000;
 const allowedOrigins = [
   process.env.CLIENT_URL,
   process.env.ADMIN_URL,
+  'https://dagotshering.me',
+  'https://www.dagotshering.me',
+  'https://admin.dagotshering.me',   // ← added
   'http://localhost:5173',
   'http://localhost:5174',
 ].filter((origin): origin is string => Boolean(origin));
