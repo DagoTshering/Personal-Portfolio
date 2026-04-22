@@ -8,7 +8,7 @@ export default defineConfig({
   out: './drizzle',
   dialect: 'postgresql',
   dbCredentials: {
-    url: process.env.DATABASE_URL || 'postgresql://portfolio:portfolio_secret@localhost:5432/portfolio',
+    url: process.env.DATABASE_URL_MIGRATION ?? process.env.DATABASE_URL!,
   },
   verbose: true,
   strict: true,
