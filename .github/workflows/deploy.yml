@@ -23,7 +23,7 @@ jobs:
       - name: Install & Build
         working-directory: ./app                        # ← changed
         env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL || 'https://api.dagotshering.me/api' }}
         run: |
           npm ci
           npm run build
@@ -51,7 +51,7 @@ jobs:
       - name: Install & Build
         working-directory: ./admin                        # ← changed
         env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL || 'https://api.dagotshering.me/api' }}
         run: |
           npm ci
           npm run build
@@ -130,13 +130,14 @@ jobs:
             git pull origin main
 
             cd backend
-            npm ci --production
-            npm run db:migrate
-
             docker compose down
             docker compose up -d --build
 
-            sleep 10
+            # Run migrations in the container so they use the same runtime env/network.
+            docker compose exec -T app npm run db:migrate
+
+            # Smoke-check API before reloading nginx.
+            curl -fsS https://api.dagotshering.me/api/health > /dev/null
 
             sudo systemctl reload nginx
 
