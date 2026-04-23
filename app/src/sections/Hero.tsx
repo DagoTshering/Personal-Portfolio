@@ -131,7 +131,7 @@ const Hero = () => {
     <section
       id="hero"
       ref={sectionRef}
-      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-void-black"
+      className="relative min-h-[100dvh] sm:min-h-screen w-full flex items-center justify-center overflow-hidden bg-void-black"
     >
       <div className="absolute inset-0">
         <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[80px] animate-pulse" />
