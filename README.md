@@ -7,7 +7,7 @@ A comprehensive, fullstack developer portfolio with Node.js backend, PostgreSQL 
 ```
 ├── backend/          # Node.js + TypeScript + Express API
 ├── app/              # React + TypeScript + Vite Frontend
-├── docker-compose.yml # Docker orchestration
+├── backend/docker-compose.production.yml # Docker orchestration (production)
 └── README.md
 ```
 
@@ -262,7 +262,7 @@ npm run build
 
 ### Docker Deployment
 ```bash
-docker-compose -f docker-compose.yml up -d
+docker compose -f backend/docker-compose.production.yml up -d
 ```
 
 ## 📄 License

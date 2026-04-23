@@ -130,11 +130,11 @@ jobs:
             git pull origin main
 
             cd backend
-            docker compose down
-            docker compose up -d --build
+            docker compose -f docker-compose.production.yml down
+            docker compose -f docker-compose.production.yml up -d --build
 
             # Run migrations in the container so they use the same runtime env/network.
-            docker compose exec -T app npm run db:migrate
+            docker compose -f docker-compose.production.yml exec -T app npm run db:migrate
 
             # Smoke-check API before reloading nginx.
             curl -fsS https://api.dagotshering.me/api/health > /dev/null
