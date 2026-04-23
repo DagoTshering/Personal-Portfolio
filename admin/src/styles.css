@@ -8,10 +8,17 @@
   box-sizing: border-box;
 }
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
   overflow-x: hidden;
+  background: radial-gradient(circle at top left, #21213a, #141420 35%, #0f1017);
 }
 
 button,
@@ -40,7 +47,8 @@ textarea {
 }
 
 .layout {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .sidebar {
@@ -54,6 +62,7 @@ textarea {
   background: rgba(11, 12, 20, 0.85);
   z-index: 30;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .sidebar h1 {
@@ -97,8 +106,9 @@ textarea {
 
 .content {
   margin-left: 230px;
-  min-height: 100vh;
-  overflow: visible;
+  height: 100vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 0;
   min-width: 0;
 }
@@ -471,9 +481,10 @@ td {
 
   .content {
     margin-left: 0;
-    height: auto;
+    height: 100vh;
     min-height: 100vh;
-    overflow-y: visible;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     padding: 0;
   }
 
