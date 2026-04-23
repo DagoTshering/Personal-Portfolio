@@ -131,7 +131,7 @@ const Hero = () => {
     <section
       id="hero"
       ref={sectionRef}
-      className="relative min-h-[100dvh] sm:min-h-screen w-full flex items-center justify-center overflow-hidden bg-void-black"
+      className="relative min-h-screen lg:min-h-[100dvh] w-full flex items-center justify-center overflow-visible lg:overflow-hidden bg-void-black"
     >
       <div className="absolute inset-0">
         <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[80px] animate-pulse" />
@@ -243,7 +243,7 @@ const Hero = () => {
 
           <div className="relative flex items-center justify-center">
             <div ref={orbitRef} className="absolute inset-0 flex items-center justify-center">
-              <div className="absolute w-[350px] h-[350px] sm:w-[450px] sm:h-[450px] rounded-full border border-white/5 animate-spin-slow">
+              <div className="absolute w-56 h-56 sm:w-72 sm:h-72 lg:w-[350px] lg:h-[350px] xl:w-[450px] xl:h-[450px] rounded-full border border-white/5 animate-spin-slow">
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-8 rounded-lg bg-surface border border-primary/50 flex items-center justify-center shadow-glow">
                   <span className="text-xs">⚛️</span>
                 </div>
@@ -257,14 +257,14 @@ const Hero = () => {
                   <span className="text-xs">◆</span>
                 </div>
               </div>
-              <div className="absolute w-[250px] h-[250px] sm:w-[320px] sm:h-[320px] rounded-full border border-white/10 animate-spin-slow" style={{ animationDirection: 'reverse', animationDuration: '15s' }}>
+              <div className="absolute w-40 h-40 sm:w-56 sm:h-56 lg:w-[250px] lg:h-[250px] xl:w-[320px] xl:h-[320px] rounded-full border border-white/10 animate-spin-slow" style={{ animationDirection: 'reverse', animationDuration: '15s' }}>
                 <div className="absolute -top-3 left-1/3 w-6 h-6 rounded-full bg-primary/30" />
                 <div className="absolute -bottom-3 right-1/3 w-6 h-6 rounded-full bg-neon-cyan/30" />
               </div>
             </div>
 
-            <div ref={avatarRef} className="relative z-10" style={{ perspective: '1000px' }}>
-              <div className="relative w-48 h-48 sm:w-64 sm:h-64">
+            <div ref={avatarRef} className="relative z-10 w-40 h-40 sm:w-48 sm:h-48 lg:w-64 lg:h-64" style={{ perspective: '1000px' }}>
+              <div className="relative w-full h-full">
                 <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary to-neon-cyan opacity-50 blur-2xl animate-pulse" />
                 <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-white/10 shadow-2xl">
                   <img
